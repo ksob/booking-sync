@@ -1,6 +1,6 @@
 # README
 
-This is a Ruby on Rails API application that allows simple booking.
+This is a Ruby on Rails API application that allows for simple booking.
 
 * Database creation
 rails db:setup
