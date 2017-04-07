@@ -1,24 +1,19 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
+This is a Ruby on Rails API application that allows simple booking.
 
 * Database creation
+rails db:setup
 
-* Database initialization
+* Running
+rails server
 
-* How to run the test suite
+* Examples of requests (httpie formatted)
 
-* Services (job queues, cache servers, search engines, etc.)
+  http GET :3000/rentals api_token="j6hd9@l664HDv2agh"
 
-* Deployment instructions
+  http POST :3000/rentals api_token="j6hd9@l664HDv2agh" name="Villa Renoma" daily_rate=820
 
-* ...
+  http GET :3000/rentals/1/bookings api_token="j6hd9@l664HDv2agh"
+
+  http POST :3000/rentals/1/bookings api_token="j6hd9@l664HDv2agh" start_at="2017-04-19" end_at="2017-04-27" client_email="myemail@client.pl" price=10000
