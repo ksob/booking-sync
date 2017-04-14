@@ -3,7 +3,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @bookings = Booking.all
+    @bookings = Booking.by_rental(params[:rental_id])
     json_response(@bookings)
   end
 
@@ -20,7 +20,7 @@ class BookingsController < ApplicationController
 
   # PUT /bookings/:id
   def update
-    @booking.update(booking_params)
+    @booking.update!(booking_params)
     head :no_content
   end
 
@@ -34,7 +34,7 @@ class BookingsController < ApplicationController
 
   def booking_params
     # whitelist params
-    params.permit(:start_at, :end_at, :client_email, :price, :rental_id)
+    params.permit(:start_at, :end_at, :client_email, :price, :id, :rental_id)
   end
 
   def set_booking
