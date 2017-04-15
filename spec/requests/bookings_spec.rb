@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe 'Bookings API', type: :request do
   before :each do          
     @rental = FactoryGirl.create(:rental)
+    @booking = FactoryGirl.create(:booking, :rental => @rental)
   end
   
-  let!(:booking) { FactoryGirl.create(:booking, :rental => @rental) }
+  let!(:booking) { @booking }
 
-  describe 'GET /bookings' do
+  describe 'GET /rentals/:id/bookings' do
     before { get '/rentals/1/bookings', {api_token: "j6hd9@l664HDv2agh"} }
 
     it 'returns bookings' do
@@ -21,7 +22,7 @@ RSpec.describe 'Bookings API', type: :request do
     end
   end
 
-  describe 'POST /bookings' do
+  describe 'POST /rentals/:id/bookings' do
     let(:valid_attributes)   { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-19", end_at: "2017-07-20", price: 120.0 } }
     let(:invalid_attributes) { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-191", end_at: "2017-07-20", price: 120.0 } }
 
@@ -51,14 +52,21 @@ RSpec.describe 'Bookings API', type: :request do
     end
   end
 
-  describe 'PUT /bookings/:id' do
-    let(:valid_attributes) { { start_at: "2017-06-19", end_at: "2017-f6-20", price: 1240.0 } }
+  describe 'PUT /rentals/:id/bookings/:id' do
+    let(:valid_attributes) { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-06-27", end_at: "2017-06-28", price: 120.0 } }
 
     context 'when the record exists' do
-      before { put "/rentals/1/bookings/#{booking.id}", {api_token: "j6hd9@l664HDv2agh"}, params: valid_attributes }
+      before { 
+        put "/rentals/1/bookings/#{booking.id}", params: valid_attributes
+        booking.reload 
+      }
 
       it 'updates the record' do
         expect(response.body).to be_empty
+      end
+
+      it 'updates the record' do
+        expect(booking.start_at).to eq("2017-06-27T00:00:00.000Z")
       end
 
       it 'returns status code 204' do
@@ -67,7 +75,30 @@ RSpec.describe 'Bookings API', type: :request do
     end
   end
 
-  describe 'DELETE /bookings/:id' do
+  describe 'PATCH /rentals/:id/bookings/:id' do
+    let(:valid_attributes) { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-04-18", price: 240.0 } }
+
+    context 'when the record exists' do
+      before { 
+        patch "/rentals/1/bookings/#{booking.id}", params: valid_attributes
+        booking.reload 
+      }
+
+      it 'updates the record' do
+        expect(response.body).to be_empty
+      end
+
+      it 'updates the record' do
+        expect(booking.start_at).to eq("2017-04-18T00:00:00.000Z")
+      end
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+  end
+
+  describe 'DELETE /rentals/:id/bookings/:id' do
     before { delete "/rentals/1/bookings/#{booking.id}", {api_token: "j6hd9@l664HDv2agh"} }
 
     it 'returns status code 204' do

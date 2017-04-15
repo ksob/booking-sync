@@ -20,7 +20,7 @@ class RentalsController < ApplicationController
 
   # PUT /rentals/:id
   def update
-    @rental.update(rental_params)
+    @rental.update!(rental_params)
     head :no_content
   end
 
@@ -34,7 +34,7 @@ class RentalsController < ApplicationController
 
   def rental_params
     # whitelist params
-    params.permit(:name, :daily_rate)
+    params.permit(:id, :name, :daily_rate)
   end
 
   def set_rental
