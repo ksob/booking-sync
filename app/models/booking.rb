@@ -1,6 +1,7 @@
 class Booking < ApplicationRecord
   belongs_to :rental
 
+  validates :start_at, :end_at, :client_email, :price, presence: true
   validate :period_is_valid
   validate :price_is_valid
   validate :at_least_one_night_stay

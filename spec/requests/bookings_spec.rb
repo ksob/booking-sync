@@ -23,8 +23,9 @@ RSpec.describe 'Bookings API', type: :request do
   end
 
   describe 'POST /rentals/:id/bookings' do
-    let(:valid_attributes)   { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-19", end_at: "2017-07-20", price: 120.0 } }
-    let(:invalid_attributes) { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-191", end_at: "2017-07-20", price: 120.0 } }
+    let(:valid_attributes)        { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-19", end_at: "2017-07-20", price: 120.0, client_email: 'abcd@a.pl' } }
+    let(:incomplete_attributes)   { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-19", end_at: "2017-07-20", price: 120.0 } }
+    let(:invalid_attributes)      { {api_token: "j6hd9@l664HDv2agh", start_at: "2017-07-191", end_at: "2017-07-20", price: 120.0 } }
 
     context 'when the request is valid' do
       before { post '/rentals/1/bookings', params: valid_attributes }
@@ -35,6 +36,19 @@ RSpec.describe 'Bookings API', type: :request do
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when the request is incomplete (not all params passed)' do
+      before { post '/rentals/1/bookings', params: incomplete_attributes }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body)
+          .to match(/can't be blank/)
       end
     end
 

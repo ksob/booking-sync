@@ -22,8 +22,9 @@ RSpec.describe 'Rentals API', type: :request do
   end
 
   describe 'POST /rentals' do
-    let(:valid_attributes)   { {api_token: "j6hd9@l664HDv2agh", name: "Villa XYZ", daily_rate: 400 } }
-    let(:invalid_attributes) { {api_token: "j6hd9@l664HDv2agh", name: "Villa XYZ", daily_rate: -400.55 } }
+    let(:valid_attributes)      { {api_token: "j6hd9@l664HDv2agh", name: "Villa XYZ", daily_rate: 400 } }
+    let(:incomplete_attributes) { {api_token: "j6hd9@l664HDv2agh", daily_rate: 400 } }
+    let(:invalid_attributes)    { {api_token: "j6hd9@l664HDv2agh", name: "Villa XYZ", daily_rate: -400.55 } }
 
     context 'when the request is valid' do
       before { post '/rentals', params: valid_attributes }
@@ -34,6 +35,19 @@ RSpec.describe 'Rentals API', type: :request do
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when the request is incomplete (not all params passed)' do
+      before { post '/rentals', params: incomplete_attributes }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body)
+          .to match(/can't be blank/)
       end
     end
 
