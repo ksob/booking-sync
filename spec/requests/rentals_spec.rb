@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Rentals API', type: :request do
   before :each do          
-    @rental = FactoryGirl.create(:rental)
+    @rental = FactoryGirl.create(:rental, daily_rate: 120)
   end
   
   let!(:rental) { @rental }

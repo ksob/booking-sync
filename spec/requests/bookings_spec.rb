@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Bookings API', type: :request do
   before :each do          
-    @rental = FactoryGirl.create(:rental)
+    @rental = FactoryGirl.create(:rental, daily_rate: 120)
     @booking = FactoryGirl.create(:booking, :rental => @rental)
   end
   
